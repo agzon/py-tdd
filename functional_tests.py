@@ -34,15 +34,21 @@ class NewVisitorTest(unittest.TestCase):
     # "1: Buy Milk" as an item in a to-do list
     inputbox.send_keys(Keys.ENTER)
 
-    table = self.browser.find_element_by_id('id_list_table')
-    rows = table.find_elements_by_tag_name('tr')
-    self.assertTrue(
-      any(row.text == '1: Buy milk' for row in rows),
-      "New to-do item did not appear in table"
-    )
+    # TEST:
+    #import time
+    #time.sleep(10)
 
     # There is still a text box inviting to add another item. The user 
     # enters "Buy bread"
+    inputbox = self.browser.find_element_by_id('id_new_item')
+    inputbox.send_keys('Buy bread')
+    inputbox.send_keys(Keys.ENTER)
+
+    table = self.browser.find_element_by_id('id_list_table')
+    rows = table.find_elements_by_tag_name('tr')
+    self.assertIn('1: Buy milk', [row.text for row in rows])
+    self.assertIn('2: Buy bread', [row.text for row in rows])
+
     self.fail('Finish the test')
 
     # The page updates again, and now shows both items in the list
